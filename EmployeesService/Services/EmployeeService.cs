@@ -179,9 +179,9 @@ namespace EmployeesService.Api.Services
                 throw new ArgumentException($"Сотрудник с Id {employeeId} не найден.");
             }
 
-            existingEmployee.Surname = updatedEmployee.Surname.IsNullOrEmpty()? existingEmployee.Surname: updatedEmployee.Surname;
-            existingEmployee.Phone = updatedEmployee.Phone.IsNullOrEmpty()? existingEmployee.Phone: updatedEmployee.Phone;
-            existingEmployee.CompanyId = updatedEmployee.CompanyId??existingEmployee.CompanyId;
+            existingEmployee.Surname = updatedEmployee.Surname.IsNullOrEmpty() ? existingEmployee.Surname : updatedEmployee.Surname;
+            existingEmployee.Phone = updatedEmployee.Phone.IsNullOrEmpty() ? existingEmployee.Phone : updatedEmployee.Phone;
+            existingEmployee.CompanyId = updatedEmployee.CompanyId ?? existingEmployee.CompanyId;
 
             _passportService.Update(updatedEmployee.Passport, existingEmployee.PassportId);
 
@@ -201,6 +201,7 @@ namespace EmployeesService.Api.Services
         WHERE Id = @Id;";
 
             _dbConnection.Execute(updateEmployeeSql, existingEmployee);
+           
         }
 
 

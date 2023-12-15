@@ -93,7 +93,7 @@ public class EmployeesController : ControllerBase
     {
         try
         {
-            _employeeService.Update(employeeId, updateData);            
+           _employeeService.Update(employeeId, updateData);            
             return Ok($"Сотрудник с Id {employeeId} успешно обновлен.");
         }
         catch (ArgumentException ex)
