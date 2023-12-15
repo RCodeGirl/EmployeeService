@@ -30,11 +30,16 @@ public class EmployeesController : ControllerBase
     public string AddEmployee([FromBody] EmployeeDto employeeDto)
     {
         var employeeModel = _mapper.Map<Employee>(employeeDto);
+        try
+        {
+            var empl = _employeeService.Create(employeeModel);
+            return string.Format("Сотрудник успешно добавлен, Id={0} ", empl.ToString());
+        }
+        catch (Exception ex)
+        {
 
-        var empl = _employeeService.Create(employeeModel);
-
-        return string.Format("Сотрудник успешно добавлен, Id={0} ", empl.ToString());
-
+            throw new Exception($"При создании  сотрудника возникла ошбибка: {ex.Message}");
+        }
     }
 
     [Route("api/[controller]/DeleteEmployee")]

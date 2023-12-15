@@ -4,8 +4,10 @@ using EmployeesService.Api.Services.Interfaces;
 using EmployeesService.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.Design;
 using System.Data;
+using System.Web.WebPages;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EmployeesService.Api.Services
@@ -177,9 +179,8 @@ namespace EmployeesService.Api.Services
                 throw new ArgumentException($"Сотрудник с Id {employeeId} не найден.");
             }
 
-            existingEmployee.Name = updatedEmployee.Name?? existingEmployee.Name;
-            existingEmployee.Surname = updatedEmployee.Surname?? existingEmployee.Surname;
-            existingEmployee.Phone = updatedEmployee.Phone ?? existingEmployee.Phone;
+            existingEmployee.Surname = updatedEmployee.Surname.IsNullOrEmpty()? existingEmployee.Surname: updatedEmployee.Surname;
+            existingEmployee.Phone = updatedEmployee.Phone.IsNullOrEmpty()? existingEmployee.Phone: updatedEmployee.Phone;
             existingEmployee.CompanyId = updatedEmployee.CompanyId??existingEmployee.CompanyId;
 
             _passportService.Update(updatedEmployee.Passport, existingEmployee.PassportId);

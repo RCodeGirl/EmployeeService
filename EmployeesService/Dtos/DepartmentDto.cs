@@ -6,10 +6,10 @@ namespace EmployeesService.Api.Dtos
 {
     public class DepartmentDto
     {
-        [DefaultValue(null)]
-        public string? Name { get; set; } 
+        [DefaultValue("")]
+        public string? Name { get; set; }
 
-        [DefaultValue(null)]
+        [DefaultValue("")]
         public string? Phone { get; set; } 
        
     }

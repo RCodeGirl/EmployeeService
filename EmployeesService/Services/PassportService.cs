@@ -5,6 +5,7 @@ using Dapper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using EmployeesService.Api.Dtos;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EmployeesService.Api.Services
 {
@@ -32,8 +33,8 @@ namespace EmployeesService.Api.Services
         public int Update(PassportDto passportDto, int passId)
         {
             var passport = GetById(passId);
-            passport.Type = passportDto.Type?? passport.Type;
-            passport.Number = passportDto.Number?? passport.Number;
+            passport.Type = passportDto.Type.IsNullOrEmpty()? passport.Type: passportDto.Type;
+            passport.Number = passportDto.Number.IsNullOrEmpty()? passport.Number: passportDto.Number;
             string updatePassportSql = @"UPDATE Passports  SET  Type = @Type,  Number = @Number  WHERE Id = @PassportId;";
 
             return _dbConnection.Execute(updatePassportSql, new { Type = passport.Type, Number = passport.Number, PassportId = passId });
