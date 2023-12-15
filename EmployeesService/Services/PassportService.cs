@@ -29,8 +29,11 @@ namespace EmployeesService.Api.Services
         }
 
 
-        public int Update(PassportDto passport, int passId)
-        {            
+        public int Update(PassportDto passportDto, int passId)
+        {
+            var passport = GetById(passId);
+            passport.Type = passportDto.Type?? passport.Type;
+            passport.Number = passportDto.Number?? passport.Number;
             string updatePassportSql = @"UPDATE Passports  SET  Type = @Type,  Number = @Number  WHERE Id = @PassportId;";
 
             return _dbConnection.Execute(updatePassportSql, new { Type = passport.Type, Number = passport.Number, PassportId = passId });

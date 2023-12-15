@@ -17,7 +17,7 @@ namespace EmployeesService.Api.Services
             _dbConnection = dbConnection;
         }
         public int Create(Department department)
-        {       
+        {
             var sqlDepartment = "INSERT INTO Departments (Name, Phone) VALUES (@Name, @Phone); SELECT CAST(SCOPE_IDENTITY() as int)";
             var departmentId = _dbConnection.ExecuteScalar<int>(sqlDepartment, new { department.Name, department.Phone });
             return departmentId;
@@ -28,25 +28,24 @@ namespace EmployeesService.Api.Services
             throw new NotImplementedException();
         }
 
-        //public int GetDepartmentByEmpId(int employeeId)
-        //{
-
-        //    var department = _dbConnection.QueryFirstOrDefault<Department>(
-        //        "SELECT Departments.* " +
-        //        "FROM Departments " +
-        //        "JOIN EmployeeDepartments ON Departments.Id = EmployeeDepartments.DepartmentId " +
-        //        "WHERE EmployeeDepartments.EmployeeId = @EmployeeId",
-        //        new { EmployeeId = employeeId });
-        //    return department!.Id;
-
-        //}
-
-        public void Update(int depId, DepartmentDto department)
+        public Department GetById(int id)
         {
+            var department = _dbConnection.QueryFirstOrDefault<Department>(
+                "SELECT Departments.*FROM Departments WHERE Id = @Id",
+                new { Id = id });
+            return department!;
+
+        }
+
+        public void Update(int depId, DepartmentDto departmentDto)
+        {
+            var department = GetById(depId);
+            department.Name = departmentDto.Name ?? department.Name;
+            department.Phone = departmentDto.Phone ?? department.Phone;
             string updatePassportSql = @"UPDATE Departments  SET  Name = @Name,  Phone = @Phone  WHERE Id = @DeppartmentId;";
             _dbConnection.Execute(updatePassportSql, new { Name = department.Name, Phone = department.Phone, DeppartmentId = depId });
         }
     }
 
-       
+
 }

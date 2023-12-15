@@ -1,12 +1,16 @@
 ﻿using EmployeesService.Models;
+using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace EmployeesService.Api.Dtos
 {
     public class DepartmentDto
     {
-        public string Name { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
+        [DefaultValue(null)]
+        public string? Name { get; set; } 
 
+        [DefaultValue(null)]
+        public string? Phone { get; set; } 
        
     }
 }

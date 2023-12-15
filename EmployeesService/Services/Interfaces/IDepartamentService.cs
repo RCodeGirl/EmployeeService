@@ -9,6 +9,8 @@ namespace EmployeesService.Api.Services.Interfaces
         void Delete(int id);
         //int GetDepartmentByEmpId(int employeeId);       
         void Update(int id, DepartmentDto employee);
+
+        Department GetById(int id);
     }
 }
 

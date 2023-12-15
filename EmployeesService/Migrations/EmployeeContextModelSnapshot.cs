@@ -89,9 +89,6 @@ namespace EmployeesService.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

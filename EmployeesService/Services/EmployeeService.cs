@@ -29,7 +29,7 @@ namespace EmployeesService.Api.Services
             var sql = "INSERT INTO Employees (Name, Surname, Phone, CompanyId,  PassportId, DepartmentId) " +
                 "VALUES (@Name, @Surname, @Phone,@CompanyId, @PassportId, @DepartmentId); SELECT CAST(SCOPE_IDENTITY() as int)";
 
-           
+
             var passId = _passportService.Create(employee.Passport);
             var parametr = new
             {
@@ -41,7 +41,7 @@ namespace EmployeesService.Api.Services
                 DepartmentId = departmentId
             };
 
-            var employeeId = _dbConnection.ExecuteScalar<int>(sql, parametr);           
+            var employeeId = _dbConnection.ExecuteScalar<int>(sql, parametr);
             return employeeId;
 
         }
@@ -50,24 +50,24 @@ namespace EmployeesService.Api.Services
         {
             // Получаем информацию о паспорте перед удалением сотрудника
             var employee = GetById(id);
-            
+
             if (employee is null)
                 throw new Exception($"Сотрудник с Id {id} не найден.");
 
-            else 
+            else
             {
                 // Удаляем сотрудника
                 _dbConnection.Execute("DELETE FROM Employees WHERE Id = @EmployeeId", new { EmployeeId = id });
 
                 // Проверяем наличие паспорта и удаляем его
-                if (employee.PassportId!=0)
+                if (employee.PassportId != 0)
                 {
                     _dbConnection.Execute("DELETE FROM Passports WHERE Id = @PassportId", new { PassportId = employee.PassportId });
                 }
-            } 
-            
+            }
+
         }
-              
+
         public Employee GetById(int id)
         {
             var sql = "SELECT * FROM Employees WHERE Id = @EmployeeId";
@@ -76,7 +76,7 @@ namespace EmployeesService.Api.Services
             return _dbConnection.QueryFirstOrDefault<Employee>(sql, parameters)!;
         }
 
-       
+
         /// <summary>
         /// Получение списка сотрудников по Id организации
         /// </summary>
@@ -84,27 +84,31 @@ namespace EmployeesService.Api.Services
         /// <returns></returns>
         public List<Employee> GetEmployeesByCompanyId(int companyId)
         {
+
             string sql = @"
-        SELECT
-            e.Id,
-            e.Name,
-            e.Surname,
-            e.Phone,
-            e.CompanyId,
-            e.PassportId,
-            p.Type AS PassportType,
-            p.Number AS PassportNumber,
-            e.DepartmentId,
-            d.Name AS DepartmentName,
-            d.Phone AS DepartmentPhone
-        FROM Employees e
-        LEFT JOIN Passports p ON e.PassportId = p.Id
-        LEFT JOIN Departments d ON e.DepartmentId = d.Id
-        WHERE e.CompanyId = @CompanyId";
+                        SELECT
+                            e.Id,
+                            e.Name,
+                            e.Surname,
+                            e.Phone,
+                            e.CompanyId,
+                            e.PassportId,
+                            e.DepartmentId,
+                            p.Id,
+                            p.Type,
+                            p.Number,
+                            d.Id,
+                            d.Name,
+                            d.Phone
+                        FROM Employees e
+                        LEFT JOIN Passports p ON e.PassportId = p.Id
+                        LEFT JOIN Departments d ON e.DepartmentId = d.Id
+                        WHERE e.CompanyId = @CompanyId;";
+
 
             var parameters = new { CompanyId = companyId };
 
-            var employees = _dbConnection.Query<Employee, Passport, Department, Employee>(
+            var result = _dbConnection.Query<Employee, Passport, Department, Employee>(
                 sql,
                 (employee, passport, department) =>
                 {
@@ -113,10 +117,10 @@ namespace EmployeesService.Api.Services
                     return employee;
                 },
                 parameters,
-                splitOn: "PassportType,DepartmentName"
+                splitOn: "Id,Id"
             ).ToList();
 
-            return employees;
+            return result;
         }
 
 
@@ -134,11 +138,13 @@ namespace EmployeesService.Api.Services
                          e.Phone,
                          e.CompanyId,
                          e.PassportId,
-                         p.Type AS PassportType,
-                         p.Number AS PassportNumber,
+                         p.Type,
+                         p.Id,
+                         p.Number,
                          e.DepartmentId,
-                         d.Name AS DepartmentName,
-                         d.Phone AS DepartmentPhone
+                         d.Name,
+                         d.Id,
+                         d.Phone
                FROM Employees e
                LEFT JOIN Passports p ON e.PassportId = p.Id
                LEFT JOIN Departments d ON e.DepartmentId = d.Id
@@ -155,13 +161,13 @@ namespace EmployeesService.Api.Services
                     return employee;
                 },
                 parameters,
-                splitOn: "PassportType,DepartmentName"
+                splitOn: "Id,Id"
             ).ToList();
 
             return employees;
         }
 
-      
+
         public void Update(int employeeId, EmployeeDto updatedEmployee)
         {
             var existingEmployee = GetById(employeeId);
@@ -170,17 +176,16 @@ namespace EmployeesService.Api.Services
             {
                 throw new ArgumentException($"Сотрудник с Id {employeeId} не найден.");
             }
-            
-            existingEmployee.Name = updatedEmployee.Name;
-            existingEmployee.Surname = updatedEmployee.Surname;
-            existingEmployee.Phone = updatedEmployee.Phone;
-            existingEmployee.CompanyId = updatedEmployee.CompanyId;
-            
-            var pass = _passportService.Update(updatedEmployee.Passport, existingEmployee.PassportId);
-            existingEmployee.PassportId = pass;
-                        
+
+            existingEmployee.Name = updatedEmployee.Name?? existingEmployee.Name;
+            existingEmployee.Surname = updatedEmployee.Surname?? existingEmployee.Surname;
+            existingEmployee.Phone = updatedEmployee.Phone ?? existingEmployee.Phone;
+            existingEmployee.CompanyId = updatedEmployee.CompanyId??existingEmployee.CompanyId;
+
+            _passportService.Update(updatedEmployee.Passport, existingEmployee.PassportId);
+
             _departamentService.Update(existingEmployee.DepartmentId, updatedEmployee.Department);
-            
+
 
             // Обновляем данные сотрудника
             string updateEmployeeSql = @"

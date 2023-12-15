@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mympjF6mOMQhSSPzdx5RPu4yDpJUB99+N+KeUd4XkPt+JehaSZoBCdRcd47dAnvXQoImH+FSWOzg2eT+nG6ITA==",
+  "dgSpecHash": "/DUUWxYaAs2j/VvsGtEaE717xkjfBykiJbM4ipgPfpZ+W0w2XyK9f5k5amVPXpS5OphdcLa8+be0tEHNIrF4gw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Margarita.Ababii\\Documents\\GitHub\\EmployeeService\\EmployeesService\\EmployeesService.Api.csproj",
   "expectedPackageFiles": [
@@ -55,6 +55,7 @@
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\microsoft.web.infrastructure\\1.0.0\\microsoft.web.infrastructure.1.0.0.nupkg.sha512",
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Margarita.Ababii\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
