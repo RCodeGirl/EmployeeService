@@ -41,8 +41,8 @@ namespace EmployeesService.Api.Services
         public void Update(int depId, DepartmentDto departmentDto)
         {
             var department = GetById(depId);
-            department.Name = departmentDto.Name.IsNullOrEmpty()? department.Name: departmentDto.Name;
-            department.Phone = departmentDto.Phone.IsNullOrEmpty()? department.Phone: departmentDto.Phone;
+            department.Name = string.IsNullOrEmpty(departmentDto.Name)? department.Name: departmentDto.Name;
+            department.Phone = string.IsNullOrEmpty(departmentDto.Phone)? department.Phone: departmentDto.Phone;
             string updatePassportSql = @"UPDATE Departments  SET  Name = @Name,  Phone = @Phone  WHERE Id = @DeppartmentId;";
             _dbConnection.Execute(updatePassportSql, new { Name = department.Name, Phone = department.Phone, DeppartmentId = depId });
         }

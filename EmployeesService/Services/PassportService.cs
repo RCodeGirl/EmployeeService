@@ -33,8 +33,8 @@ namespace EmployeesService.Api.Services
         public int Update(PassportDto passportDto, int passId)
         {
             var passport = GetById(passId);
-            passport.Type = passportDto.Type.IsNullOrEmpty()? passport.Type: passportDto.Type;
-            passport.Number = passportDto.Number.IsNullOrEmpty()? passport.Number: passportDto.Number;
+            passport.Type = string.IsNullOrEmpty(passportDto.Type)? passport.Type: passportDto.Type;
+            passport.Number = string.IsNullOrEmpty(passportDto.Number) ? passport.Number: passportDto.Number;
             string updatePassportSql = @"UPDATE Passports  SET  Type = @Type,  Number = @Number  WHERE Id = @PassportId;";
 
             return _dbConnection.Execute(updatePassportSql, new { Type = passport.Type, Number = passport.Number, PassportId = passId });
